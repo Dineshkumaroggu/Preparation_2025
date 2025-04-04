@@ -1487,5 +1487,65 @@ List<Employee> emps = repo.findByName("John");
 - ✅ **JPA**: You want a standard ORM spec (used with Hibernate, EclipseLink).
 - ✅ **Spring Data JPA**: You’re using Spring Boot and want fast dev with minimal code.
 
-Would you like these examples as a full runnable project structure (like Spring Boot setup)?
+
+---
+
+### 🧵 1. **Using the `Runnable` Interface** (Preferred way)
+
+```java
+// Define a class that implements Runnable
+class MyRunnable implements Runnable {
+    public void run() {
+        System.out.println("Thread running using Runnable!");
+    }
+}
+
+public class RunnableExample {
+    public static void main(String[] args) {
+        MyRunnable obj = new MyRunnable();
+        Thread t1 = new Thread(obj); // Pass the Runnable to Thread
+        t1.start(); // Start the thread
+    }
+}
+```
+
+✅ **Why use Runnable?**
+- Supports multiple inheritance (you can extend another class).
+- Separates thread logic from thread creation.
+
+---
+
+### 🧵 2. **Using the `Thread` Class** (Direct subclass)
+
+```java
+// Extend the Thread class
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread running using Thread class!");
+    }
+}
+
+public class ThreadExample {
+    public static void main(String[] args) {
+        MyThread t1 = new MyThread();
+        t1.start(); // Start the thread
+    }
+}
+```
+
+✅ **Why use Thread class?**
+- Quick and simple.
+- Good for small use cases where inheritance from Thread is okay.
+
+---
+
+### 🔁 Comparison:
+
+| Feature         | `Runnable`                        | `Thread`                              |
+|-----------------|-----------------------------------|----------------------------------------|
+| Inheritance     | Can extend other classes          | Can't extend any other class           |
+| Flexibility     | More flexible (recommended)       | Less flexible                          |
+| Separation      | Separates task & thread           | Task and thread are tightly coupled    |
+
+---
 
