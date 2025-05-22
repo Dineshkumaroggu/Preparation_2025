@@ -1,132 +1,138 @@
 
+> **"You have a list of students with ID, firstname, and CGPA. Sort them by:**
+>
+> * **CGPA (descending)**
+> * **Firstname (ascending)**
+> * **ID (ascending, if needed)"**
 
+You’ll get **two versions**:
 
+1. ✅ **Normal sorting using `Collections.sort()`**
+2. ✅ **Stream-based sorting using Java 8+ Streams**
 
-Can we make class as static 
-———————
-In Java, yes, you can declare a class as static, but only if it is a nested class
+---
 
+### ✅ 1. Normal Sorting (Using `Collections.sort()` with Comparator)
 
-Disadvantages of micro services 
+```java
+import java.util.*;
 
-Disadvantage	Description
-Complexity	More services = more moving parts
-Deployment Overhead	Separate pipelines, coordination needed
-Data Challenges	Difficult to maintain consistency
-Latency	Inter-service calls add delay
-Security	More endpoints to secure
-Testing	Harder to test full flows
-Learning Curve	DevOps & distributed systems knowledge required
-Cost	Higher infra & ops cost
-Compatibility	APIs must be stable and versioned
-Tooling Needs	Strong observability and automation required
+class Student {
+    int id;
+    String firstname;
+    double cgpa;
 
-
-
-Use of each oops 
-
-—————
-
-Multiple  and multi level inheritance and how to achieve it using inheritance 
-
-Inheritance Type	Supported in Java	How to Achieve
-Multilevel	✅ Yes	class C extends B extends A
-Multiple (via class)	❌ No	Not allowed (causes ambiguity)
-Multiple (via interface)	✅ Yes	class C implements A, B
-
-class A {
-    void show() { System.out.println("A"); }
-}
-
-class B extends A {
-    void show() { System.out.println("B"); }
-}
-
-class C extends A {
-    void show() { System.out.println("C"); }
-}
-
-// class D extends B, C { } // ❌ Which show() should it inherit?
-
-———————————
-
-Java coding questions for spilt based on comma 
-
-Accessing string to chars array and index based access 
-Frequently using java 8 
-
-Streams chars frequency
-
-
-————————
-When we use component and bean where we can use bean cannot component 
-
-Great question! In Spring Framework, both @Component and @Bean are used to define beans (i.e., objects managed by the Spring container), but they have different use cases and scopes of control.
-Let’s break it down:
-
-✅ 1. @Component
-* Used on classes to auto-detect and register beans via component scanning.
-* Spring automatically detects the class and registers it as a bean.
-Example:
-@Component
-public class MyService {
-    public void doWork() {
-        System.out.println("Working...");
+    Student(int id, String firstname, double cgpa) {
+        this.id = id;
+        this.firstname = firstname;
+        this.cgpa = cgpa;
     }
-}
-➡ Registered automatically if the class is inside a package scanned by @ComponentScan.
 
-✅ 2. @Bean
-* Used on methods inside a @Configuration class to explicitly declare a bean.
-* Gives you full manual control over bean creation (including constructors with parameters, custom init, etc.)
-Example:
-@Configuration
-public class AppConfig {
-
-    @Bean
-    public MyService myService() {
-        return new MyService();  // manual instantiation
+    @Override
+    public String toString() {
+        return firstname + " - " + cgpa + " (ID: " + id + ")";
     }
 }
 
-🟨 Key Differences
-Feature	@Component	@Bean
-Applied on	Class	Method inside @Configuration class
-Discovery mechanism	Classpath scanning (@ComponentScan)	Manual declaration
-Object creation	Handled by Spring	You control instantiation
-Use with external libs	❌ Not ideal	✅ Perfect for 3rd party/legacy classes
-Custom initialization	Limited	Full control with method body
-Flexibility	Less flexible	More flexible
-❓Where can you use @Bean but not @Component?
-Scenario	Why @Bean is required
-You want to create a bean for a class not under your control, e.g., from a third-party library	You can’t annotate it with @Component
-You need to inject parameters manually, call constructors with logic, or set properties conditionally	Only @Bean gives that level of control
-You want to configure multiple beans of the same type differently	With @Bean methods, you can return different objects
-Example with third-party:
-@Configuration
-public class AppConfig {
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate(); // class from external library
+public class SortStudentsNormal {
+    public static void main(String[] args) {
+        List<Student> students = new ArrayList<>();
+        students.add(new Student(33, "Tina", 3.68));
+        students.add(new Student(85, "Louis", 3.85));
+        students.add(new Student(56, "Samil", 3.75));
+        students.add(new Student(19, "Samil", 3.75));
+        students.add(new Student(22, "Ally", 3.85));
+
+        Collections.sort(students, new Comparator<Student>() {
+            public int compare(Student s1, Student s2) {
+                if (s1.cgpa != s2.cgpa) {
+                    return Double.compare(s2.cgpa, s1.cgpa); // Descending CGPA
+                } else if (!s1.firstname.equals(s2.firstname)) {
+                    return s1.firstname.compareTo(s2.firstname); // Ascending Firstname
+                } else {
+                    return Integer.compare(s1.id, s2.id); // Ascending ID
+                }
+            }
+        });
+
+        for (Student s : students) {
+            System.out.println(s);
+        }
     }
 }
-You cannot annotate RestTemplate (a class from Spring) with @Component — but you can declare it using @Bean.
+```
 
-✅ Summary
-* Use @Component when:
-    * You own the class.
-    * It’s a simple service, DAO, etc.
-    * You want Spring to auto-detect it.
-* Use @Bean when:
-    * You need fine control over object creation.
-    * The class is from a third-party library.
-    * You need to configure the bean explicitly.
-Let me know if you'd like an example project showing both!
+---
 
+### ✅ 2. Stream-based Sorting (Java 8+)
 
+```java
+import java.util.*;
+import java.util.stream.Collectors;
 
+class Student {
+    int id;
+    String firstname;
+    double cgpa;
 
-Transactions between two micro services and how to debug 
+    Student(int id, String firstname, double cgpa) {
+        this.id = id;
+        this.firstname = firstname;
+        this.cgpa = cgpa;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public double getCgpa() {
+        return cgpa;
+    }
+
+    @Override
+    public String toString() {
+        return firstname + " - " + cgpa + " (ID: " + id + ")";
+    }
+}
+
+public class SortStudentsStream {
+    public static void main(String[] args) {
+        List<Student> students = Arrays.asList(
+            new Student(33, "Tina", 3.68),
+            new Student(85, "Louis", 3.85),
+            new Student(56, "Samil", 3.75),
+            new Student(19, "Samil", 3.75),
+            new Student(22, "Ally", 3.85)
+        );
+
+        List<Student> sorted = students.stream()
+            .sorted(Comparator.comparingDouble(Student::getCgpa).reversed()
+                .thenComparing(Student::getFirstname)
+                .thenComparingInt(Student::getId))
+            .collect(Collectors.toList());
+
+        sorted.forEach(System.out::println);
+    }
+}
+```
+
+---
+
+### 🧪 Sample Output (Both Versions):
+
+```
+Ally - 3.85 (ID: 22)
+Louis - 3.85 (ID: 85)
+Samil - 3.75 (ID: 19)
+Samil - 3.75 (ID: 56)
+Tina - 3.68 (ID: 33)
+```
+
+---
 
 
 
@@ -413,3 +419,4 @@ public class CharFrequencyStream {
 | Java 8 Stream | `Map<Character, Long>`    | Elegant and concise  |
 
 Let me know if you'd like to sort the map by frequency or print the result in descending order!
+

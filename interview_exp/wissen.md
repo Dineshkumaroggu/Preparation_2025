@@ -82,3 +82,8 @@ s.getSubjects().add("Physics");  // Still won't affect the original `subjects` l
 
 ------------------------------------------------------------------------------------------------------------
 
+Can we make class as static ..?
+
+In Java, yes, you can declare a class as static, but only if it is a nested class
+
+------------------------------------------------------------------------------------------------------------
