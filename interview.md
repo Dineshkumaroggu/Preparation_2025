@@ -1,7 +1,6 @@
 
-How to make class immutable 
 
-Singleton class
+
 
 Can we make class as static 
 ———————
