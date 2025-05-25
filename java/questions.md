@@ -57,5 +57,75 @@ Here, both are **implementations of the `List` interface**, not external lists.
 
 ---
 
+Here's your requested Java **exception hierarchy** tree, now annotated with whether each item is a **class**, **interface**, and what it **extends** or **implements**.
+
+---
+eg :
+
+public interface Serializable 
+
+public class Throwable implements Serializable
+
+class Exception extends Throwable
+
+---------------------
+### ✅ Java Exception Hierarchy with Type, Extends, Implements
+
+```
+java.lang.Object                     ← class (root of all classes)
+   └── java.lang.Throwable           ← class (implements java.io.Serializable)
+         ├── java.lang.Error         ← class (extends Throwable)
+         │     ├── AssertionError                  ← class (extends Error)
+         │     ├── OutOfMemoryError                ← class (extends Error)
+         │     ├── StackOverflowError              ← class (extends Error)
+         │     └── ...                             ← other subclasses of Error
+         │
+         └── java.lang.Exception     ← class (extends Throwable)
+               ├── java.lang.RuntimeException      ← class (extends Exception)
+               │     ├── NullPointerException                ← class (extends RuntimeException)
+               │     ├── ArrayIndexOutOfBoundsException      ← class (extends IndexOutOfBoundsException → RuntimeException)
+               │     ├── IllegalArgumentException            ← class (extends RuntimeException)
+               │     ├── ClassCastException                  ← class (extends RuntimeException)
+               │     ├── NumberFormatException               ← class (extends IllegalArgumentException → RuntimeException)
+               │     ├── UnsupportedOperationException       ← class (extends RuntimeException)
+               │     └── ...                                 ← other RuntimeException subclasses
+               │
+               ├── java.io.IOException           ← class (extends Exception)
+               │     ├── java.io.FileNotFoundException       ← class (extends IOException)
+               │     └── java.io.EOFException                ← class (extends IOException)
+               │
+               ├── java.sql.SQLException         ← class (extends Exception)
+               ├── java.lang.ClassNotFoundException ← class (extends Exception)
+               ├── java.lang.InterruptedException   ← class (extends Exception)
+               ├── java.lang.reflect.InvocationTargetException ← class (extends Exception)
+               ├── java.text.ParseException       ← class (extends Exception)
+               └── ...                            ← other subclasses of Exception
+```
+
+---
+
+### 🔹 Key Interfaces Used
+
+| Name                   | Type      | Description                                     |
+| ---------------------- | --------- | ----------------------------------------------- |
+| `java.io.Serializable` | Interface | Marker interface – allows object serialization. |
+| All exceptions/errors  |           | ✅ Implement `Serializable` via `Throwable`.     |
+
+---
+
+### 🔹 Summary
+
+| Name                    | Type      | Extends / Implements                            |
+| ----------------------- | --------- | ----------------------------------------------- |
+| `Object`                | Class     | –                                               |
+| `Throwable`             | Class     | Extends `Object`, Implements `Serializable`     |
+| `Error`                 | Class     | Extends `Throwable`                             |
+| `Exception`             | Class     | Extends `Throwable`                             |
+| `RuntimeException`      | Class     | Extends `Exception`                             |
+| All specific exceptions | Class     | Extend one of the above, directly or indirectly |
+| `Serializable`          | Interface | –                                               |
+
+---
+
 
 
